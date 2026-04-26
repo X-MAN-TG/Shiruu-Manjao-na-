@@ -182,11 +182,6 @@ function initVinylPlayer() {
     entries.forEach(e => {
       if (e.isIntersecting && !autoPlayed) {
         autoPlayed = true;
-        setTimeout(() => {
-          if (!isPlaying && audioEl.src && audioEl.src !== window.location.href) {
-            audioEl.play().catch(() => {});
-          }
-        }, 700);
       }
     });
   }, { threshold: 0.55 });
