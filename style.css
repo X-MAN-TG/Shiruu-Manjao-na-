@@ -1,0 +1,498 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Satisfy&display=swap');
+
+:root {
+  --rose: #FF6B8A;
+  --rose-light: #FFB3C4;
+  --rose-pale: #FFF0F3;
+  --peach: #FFCBA4;
+  --peach-light: #FFF5EE;
+  --gold: #F4A261;
+  --lavender: #C9B8F0;
+  --lavender-light: #F0ECFC;
+  --cream: #FFFAF7;
+  --text-dark: #3D1A2E;
+  --text-mid: #7A3D5C;
+  --text-soft: #B07090;
+  --shadow-rose: rgba(255, 107, 138, 0.25);
+  --shadow-deep: rgba(61, 26, 46, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── Floating Petals Background ── */
+.petals-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.petal {
+  position: absolute;
+  top: -60px;
+  font-size: 1.4rem;
+  opacity: 0;
+  animation: petalFall linear infinite;
+}
+
+@keyframes petalFall {
+  0%   { opacity: 0; transform: translateY(-60px) rotate(0deg) scale(0.8); }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(110vh) rotate(720deg) scale(1.1); }
+}
+
+/* ── Page wrapper ── */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* ── Hero Section ── */
+.hero {
+  text-align: center;
+  padding: 60px 0 40px;
+  opacity: 0;
+  animation: fadeSlideUp 1s ease forwards 0.3s;
+}
+
+.hero-emoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  15%       { transform: scale(1.18); }
+  30%       { transform: scale(1); }
+  45%       { transform: scale(1.12); }
+  60%       { transform: scale(1); }
+}
+
+.hero-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--rose), var(--gold), var(--lavender));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ── Cute tag chips ── */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 28px 0;
+  opacity: 0;
+  animation: fadeSlideUp 1s ease forwards 0.6s;
+}
+
+.tag {
+  background: white;
+  border: 2px solid var(--rose-light);
+  color: var(--text-mid);
+  border-radius: 50px;
+  padding: 6px 18px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: 0 3px 12px var(--shadow-rose);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.tag:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 18px var(--shadow-rose);
+}
+
+/* ── Lines strip ── */
+.cute-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 32px 0;
+  opacity: 0;
+  animation: fadeSlideUp 1s ease forwards 0.8s;
+}
+
+.cute-line {
+  background: linear-gradient(135deg, #fff5f7, #fff0f9);
+  border-left: 4px solid var(--rose);
+  border-radius: 0 16px 16px 0;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  box-shadow: 0 3px 14px var(--shadow-deep);
+  transition: transform 0.2s;
+}
+
+.cute-line:hover {
+  transform: translateX(6px);
+}
+
+/* ── Secret Message Card ── */
+.message-card {
+  background: white;
+  border-radius: 28px;
+  padding: 38px 36px;
+  box-shadow: 0 8px 40px var(--shadow-deep), 0 2px 0 var(--rose-light);
+  border: 2px solid #FFE4EC;
+  position: relative;
+  overflow: hidden;
+  margin: 40px 0;
+  opacity: 0;
+  animation: fadeSlideUp 1s ease forwards 1s;
+}
+
+.message-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--rose), var(--peach), var(--lavender), var(--rose));
+  background-size: 200%;
+  animation: gradientShift 4s linear infinite;
+}
+
+.message-card::after {
+  content: '💌';
+  position: absolute;
+  top: 18px; right: 22px;
+  font-size: 1.6rem;
+  opacity: 0.5;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0%; }
+  100% { background-position: 200%; }
+}
+
+.message-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 18px;
+}
+
+.message-text {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--text-dark);
+  font-weight: 500;
+  white-space: pre-line;
+}
+
+/* ── Shayari Block ── */
+.shayari-block {
+  background: linear-gradient(135deg, var(--lavender-light), var(--rose-pale));
+  border: 2px dashed var(--lavender);
+  border-radius: 20px;
+  padding: 28px 30px;
+  margin: 28px 0;
+  text-align: center;
+  position: relative;
+}
+
+.shayari-block::before,
+.shayari-block::after {
+  content: '✦';
+  position: absolute;
+  color: var(--lavender);
+  font-size: 1.2rem;
+}
+
+.shayari-block::before { top: 10px; left: 14px; }
+.shayari-block::after  { bottom: 10px; right: 14px; }
+
+.shayari-icon {
+  font-size: 1.8rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.shayari-text {
+  font-family: 'Lora', serif;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  color: var(--text-mid);
+  font-style: italic;
+  white-space: pre-line;
+}
+
+/* ── Voice Note Section ── */
+.vn-section {
+  margin: 50px 0 40px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeSlideUp 1s ease forwards 1.2s;
+}
+
+.vn-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 24px;
+}
+
+/* ── Vinyl Disk Player ── */
+.vinyl-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.vinyl-disk-container {
+  position: relative;
+  width: 210px;
+  height: 210px;
+}
+
+.vinyl-disk {
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #fff0f3 0%, #fff0f3 14%, transparent 14%),
+    radial-gradient(circle at 50% 50%, #f8d7df 0%, #f8d7df 17%, transparent 17%),
+    conic-gradient(
+      #2a0a14 0deg, #3d1020 20deg, #2a0a14 40deg, #3d1020 60deg,
+      #2a0a14 80deg, #3d1020 100deg, #2a0a14 120deg, #3d1020 140deg,
+      #2a0a14 160deg, #3d1020 180deg, #2a0a14 200deg, #3d1020 220deg,
+      #2a0a14 240deg, #3d1020 260deg, #2a0a14 280deg, #3d1020 300deg,
+      #2a0a14 320deg, #3d1020 340deg, #2a0a14 360deg
+    );
+  box-shadow:
+    0 0 0 3px #c0607a,
+    0 0 0 7px #2a0a14,
+    0 12px 40px rgba(61,26,46,0.4);
+  transition: box-shadow 0.3s;
+  position: relative;
+}
+
+.vinyl-disk.spinning {
+  animation: vinylSpin 3s linear infinite;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.vinyl-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 74px; height: 74px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose), #ff8fab);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px var(--shadow-rose);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.vinyl-label-text {
+  font-family: 'Satisfy', cursive;
+  font-size: 0.62rem;
+  color: white;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+/* Play/Pause Button */
+.play-btn {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rose), #ff8fab);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px var(--shadow-rose);
+  transition: transform 0.2s, box-shadow 0.2s;
+  outline: none;
+  position: relative;
+}
+
+.play-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 32px var(--shadow-rose);
+}
+
+.play-btn:active {
+  transform: scale(0.96);
+}
+
+.play-icon {
+  font-size: 1.5rem;
+  color: white;
+  line-height: 1;
+  margin-left: 4px;
+}
+
+.play-icon.paused { margin-left: 0; }
+
+/* Waveform bars */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 48px;
+  padding: 0 8px;
+}
+
+.bar {
+  width: 5px;
+  border-radius: 3px;
+  background: linear-gradient(to top, var(--rose), var(--peach));
+  transition: height 0.15s ease;
+  min-height: 5px;
+}
+
+.bar.active {
+  animation: barBounce 0.6s ease-in-out infinite;
+}
+
+.bar:nth-child(2)  { animation-delay: 0.05s; }
+.bar:nth-child(3)  { animation-delay: 0.1s; }
+.bar:nth-child(4)  { animation-delay: 0.15s; }
+.bar:nth-child(5)  { animation-delay: 0.2s; }
+.bar:nth-child(6)  { animation-delay: 0.25s; }
+.bar:nth-child(7)  { animation-delay: 0.3s; }
+.bar:nth-child(8)  { animation-delay: 0.2s; }
+.bar:nth-child(9)  { animation-delay: 0.1s; }
+.bar:nth-child(10) { animation-delay: 0.05s; }
+.bar:nth-child(11) { animation-delay: 0.15s; }
+.bar:nth-child(12) { animation-delay: 0.25s; }
+.bar:nth-child(13) { animation-delay: 0.1s; }
+.bar:nth-child(14) { animation-delay: 0.2s; }
+
+@keyframes barBounce {
+  0%, 100% { transform: scaleY(0.3); }
+  50%       { transform: scaleY(1); }
+}
+
+.vn-tip {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* ── Progress bar ── */
+.progress-wrap {
+  width: 220px;
+  background: #ffe4ec;
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--rose), var(--peach));
+  border-radius: 10px;
+  transition: width 0.3s;
+}
+
+/* ── Credits ── */
+.credits {
+  text-align: center;
+  padding: 40px 20px 20px;
+  opacity: 0;
+  animation: fadeSlideUp 1s ease forwards 1.5s;
+}
+
+.credits-heart {
+  font-size: 2.2rem;
+  display: block;
+  animation: heartBeat 1.5s ease-in-out infinite;
+  margin-bottom: 14px;
+}
+
+.credits-text {
+  font-family: 'Satisfy', cursive;
+  font-size: 1.25rem;
+  color: var(--text-mid);
+  line-height: 2;
+}
+
+.credits-text span {
+  color: var(--rose);
+  font-size: 1.4rem;
+}
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Shared animations ── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .message-card { padding: 28px 22px; }
+  .shayari-block { padding: 22px 20px; }
+  .vinyl-disk-container, .vinyl-disk { width: 180px; height: 180px; }
+  .vinyl-label { width: 64px; height: 64px; }
+}
