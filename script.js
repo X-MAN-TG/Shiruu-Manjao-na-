@@ -24,19 +24,14 @@ for (let i = 0; i < 10; i++) setTimeout(createPetal, i * 350);
 // ═══════════════════════════════════
 //  ENVELOPE OPEN LOGIC
 // ═══════════════════════════════════
-const waxSeal       = document.getElementById('waxSeal');
-const envFlap       = document.getElementById('envFlap');
-const envScene      = document.getElementById('envScene');
-const envelopeScreen= document.getElementById('envelopeScreen');
-const mainPage      = document.getElementById('mainPage');
-const tapHint       = document.getElementById('tapHint');
+const waxSeal        = document.getElementById('waxSeal');
+const envFlap        = document.getElementById('envFlap');
+const envScene       = document.getElementById('envScene');
+const envelopeScreen = document.getElementById('envelopeScreen');
+const mainPage       = document.getElementById('mainPage');
+const tapHint        = document.getElementById('tapHint');
 
 let opened = false;
-
-// Shimmer hint on seal
-setTimeout(() => {
-  waxSeal.style.boxShadow = '0 0 0 0 rgba(255,107,138,0)';
-}, 200);
 
 waxSeal.addEventListener('click', openEnvelope);
 waxSeal.addEventListener('touchstart', (e) => { e.preventDefault(); openEnvelope(); }, { passive: false });
@@ -45,27 +40,22 @@ function openEnvelope() {
   if (opened) return;
   opened = true;
 
-  // 1. Crack the wax seal
   waxSeal.classList.add('cracking');
   tapHint.style.opacity = '0';
 
-  // 2. After seal is gone, flip the flap
   setTimeout(() => {
     envFlap.classList.add('open');
-    // subtle bounce on envelope
     envScene.style.transition = 'transform .3s ease';
     envScene.style.transform  = 'scale(1.04)';
     setTimeout(() => { envScene.style.transform = 'scale(1)'; }, 300);
   }, 450);
 
-  // 3. Envelope rises up and fades
   setTimeout(() => {
     envelopeScreen.style.transition = 'opacity .7s ease, transform .7s ease';
     envelopeScreen.style.transform  = 'translateY(-40px) scale(.95)';
     envelopeScreen.style.opacity    = '0';
   }, 1300);
 
-  // 4. Reveal main page
   setTimeout(() => {
     envelopeScreen.style.display = 'none';
     mainPage.classList.remove('hidden');
@@ -84,7 +74,6 @@ function initScrollReveal() {
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
       if (e.isIntersecting) {
-        // stagger
         setTimeout(() => e.target.classList.add('visible'), i * 80);
         obs.unobserve(e.target);
       }
@@ -95,10 +84,9 @@ function initScrollReveal() {
 
 
 // ═══════════════════════════════════
-//  VINYL PLAYER
+//  VINYL PLAYER — BULLETPROOF VERSION
 // ═══════════════════════════════════
 function initVinylPlayer() {
-  const audioEl      = document.getElementById('voice-note');
   const playBtn      = document.getElementById('playBtn');
   const playIcon     = document.getElementById('playIcon');
   const vinylDisk    = document.getElementById('vinylDisk');
@@ -108,7 +96,11 @@ function initVinylPlayer() {
   const bars         = document.querySelectorAll('.bar');
   const vnTip        = document.getElementById('vnTip');
 
-  let isPlaying  = false;
+  // JUGAD: Create Audio object directly in JS — bypasses all HTML src issues
+  const audio = new Audio('voicenote.mp3');
+  audio.preload = 'auto';
+
+  let isPlaying = false;
   let barInterval;
 
   function startBars() {
@@ -117,23 +109,13 @@ function initVinylPlayer() {
       bars.forEach(b => { b.style.height = (5 + Math.random() * 46) + 'px'; });
     }, 140);
   }
+
   function stopBars() {
     clearInterval(barInterval);
     bars.forEach(b => { b.classList.remove('active'); b.style.height = '5px'; });
   }
 
-  playBtn.addEventListener('click', () => {
-    if (!audioEl.src || audioEl.src.trim() === '' || audioEl.src.endsWith('/')) {
-  vnTip.textContent = '🎵 voicenote.mp3 file same folder mein daalo, Ayush!';
-  vnTip.style.color = 'var(--rose)';
-  return;
-    }
-    isPlaying ? audioEl.pause() : audioEl.play().catch(() => {
-      vnTip.textContent = '⚠️ Audio load nahi hua — file path check karo 🥺';
-    });
-  });
-
-  audioEl.addEventListener('play', () => {
+  audio.addEventListener('play', () => {
     isPlaying = true;
     playIcon.textContent = '⏸';
     playIcon.classList.remove('paused');
@@ -143,7 +125,7 @@ function initVinylPlayer() {
     vnTip.textContent = '🎧 Sun rahi ho na Shriuu... 🥺💖';
   });
 
-  audioEl.addEventListener('pause', () => {
+  audio.addEventListener('pause', () => {
     isPlaying = false;
     playIcon.textContent = '▶';
     playIcon.classList.add('paused');
@@ -153,7 +135,7 @@ function initVinylPlayer() {
     vnTip.textContent = '▶ Play karo na princess... Billu ka dil bol raha hai 🥺';
   });
 
-  audioEl.addEventListener('ended', () => {
+  audio.addEventListener('ended', () => {
     isPlaying = false;
     playIcon.textContent = '▶';
     playIcon.classList.add('paused');
@@ -164,26 +146,30 @@ function initVinylPlayer() {
     vnTip.textContent = '💝 Suna? Dil se tha... Man jao ab Shriuu 🥺👉🏻👈🏻';
   });
 
-  audioEl.addEventListener('timeupdate', () => {
-    if (audioEl.duration) {
-      progressFill.style.width = (audioEl.currentTime / audioEl.duration * 100) + '%';
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
     }
   });
 
-  progressWrap.addEventListener('click', (e) => {
-    const r = progressWrap.getBoundingClientRect();
-    if (audioEl.duration) audioEl.currentTime = ((e.clientX - r.left) / r.width) * audioEl.duration;
+  // Play button — direct user tap, browser always allows this
+  playBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch((err) => {
+        vnTip.textContent = '⚠️ File mil nahi rahi — voicenote.mp3 same folder mein hai? 🥺';
+        vnTip.style.color = 'var(--rose)';
+        console.error('Audio error:', err);
+      });
+    }
   });
 
-  // Auto-play when vinyl section enters viewport
-  let autoPlayed = false;
-  const vnSection = document.querySelector('.vn-section');
-  const vnObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting && !autoPlayed) {
-        autoPlayed = true;
-      }
-    });
-  }, { threshold: 0.55 });
-  vnObs.observe(vnSection);
+  // Progress bar scrubbing
+  progressWrap.addEventListener('click', (e) => {
+    const r = progressWrap.getBoundingClientRect();
+    if (audio.duration) {
+      audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+    }
+  });
 }
