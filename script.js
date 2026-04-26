@@ -123,10 +123,10 @@ function initVinylPlayer() {
   }
 
   playBtn.addEventListener('click', () => {
-    if (!audioEl.src || audioEl.src === window.location.href) {
-      vnTip.textContent = '🎵 voicenote.mp3 file same folder mein daalo, Ayush!';
-      vnTip.style.color = 'var(--rose)';
-      return;
+    if (!audioEl.src || audioEl.src.trim() === '' || audioEl.src.endsWith('/')) {
+  vnTip.textContent = '🎵 voicenote.mp3 file same folder mein daalo, Ayush!';
+  vnTip.style.color = 'var(--rose)';
+  return;
     }
     isPlaying ? audioEl.pause() : audioEl.play().catch(() => {
       vnTip.textContent = '⚠️ Audio load nahi hua — file path check karo 🥺';
